@@ -1,0 +1,26 @@
+[
+  {
+    "name": "C-Programming",
+    "image": "/images/c-programming.png"
+  },
+  {
+    "name": "C++ Programming",
+    "image": "/images/cpp-programming.png"
+  },
+  {
+    "name": "C++ Standard Template Library",
+    "image": "/images/cpp-stl.png"
+  },
+  {
+    "name": "Python Programming",
+    "image": "/images/python-programming.png"
+  },
+  {
+    "name": "Data Structure and Algorithms with C++",
+    "image": "/images/dsa-cpp.png"
+  },
+  {
+    "name": "Data Structures and Algorithms with Python",
+    "image": "/images/dsa-python.png"
+  }
+]

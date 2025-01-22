@@ -6,7 +6,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>My Courses - Suresh</title>
+        <title>encodedCoder · Courses</title>
         <meta
           name="description"
           content="A website listing my programming courses"

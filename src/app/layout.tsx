@@ -2,7 +2,8 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { useEffect, useState } from "react";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,29 +20,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [year, setYear] = useState(new Date().getFullYear());
-
-  useEffect(() => {
-    setYear(new Date().getFullYear());
-  }, []);
-
   return (
     <html lang="en">
       <head>
-        <title>Courses: encodedCoder · Suresh</title>
+        <title>encodedCoder · Courses</title>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="p-4 bg-gray-800 text-white text-center">
-          <h1 className="text-2xl font-bold">Courses: encodedCoder · Suresh</h1>
-        </header>
+        <Header />
         <main className="p-4">{children}</main>
-        <footer className="p-4 bg-gray-800 text-white text-center">
-          <p>
-            Copyright &copy; {year} encodedCoder · Suresh. All rights reserved.
-          </p>
-        </footer>
+        <Footer />
       </body>
     </html>
   );
