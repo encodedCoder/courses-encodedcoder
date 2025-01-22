@@ -47,7 +47,7 @@ const Header = () => {
             className="text-gray-500 focus:outline-none"
           >
             <svg
-              className="w-6 h-6"
+              className="w-6 h-6 text-gray-500"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -69,17 +69,13 @@ const Header = () => {
             <Link href="/" className="nav-link" onClick={toggleMenu}>
               Home
             </Link>
-            <Link href="/portfolio" className="nav-link" onClick={toggleMenu}>
-              Portfolio
-            </Link>
-            <Link href="/projects" className="nav-link" onClick={toggleMenu}>
-              Projects
-            </Link>
-            <Link href="/about" className="nav-link" onClick={toggleMenu}>
-              About
-            </Link>
-            <Link href="/contact" className="nav-link" onClick={toggleMenu}>
-              Contact
+            <Link
+              href="https://encodedcoder.com/"
+              className="nav-link"
+              target="_blank"
+            >
+              {" "}
+              encodedCoder
             </Link>
           </div>
         </div>

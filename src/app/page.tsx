@@ -19,7 +19,7 @@ export default function Home() {
 
   return (
     <div className="grid items-center justify-items-center min-h-screen gap-4 sm:gap-8 font-[family-name:var(--font-geist-sans)] bg-white">
-      <main className="flex flex-col items-center sm:items-start">
+      <main className="flex flex-col items-center sm:items-start py-8 px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {courses.map((course, index) => (
             <div
