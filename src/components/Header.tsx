@@ -69,6 +69,9 @@ const Header = () => {
             <Link href="/" className="nav-link" onClick={toggleMenu}>
               Home
             </Link>
+            <Link href="/" className="nav-link" onClick={toggleMenu}>
+              Home
+            </Link>
             <Link
               href="https://encodedcoder.com/"
               className="nav-link"
@@ -76,6 +79,9 @@ const Header = () => {
             >
               {" "}
               encodedCoder
+            </Link>
+            <Link href="/shrey" className="nav-link">
+              Shrey
             </Link>
           </div>
         </div>
