@@ -8,6 +8,7 @@ export default function Home() {
     image: string;
     name: string;
     isActive: boolean;
+    releaseDate: string;
   }
 
   const [courses, setCourses] = useState<Course[]>([]);
