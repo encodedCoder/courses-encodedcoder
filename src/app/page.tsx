@@ -7,6 +7,7 @@ export default function Home() {
   interface Course {
     image: string;
     name: string;
+    isActive: boolean;
   }
 
   const [courses, setCourses] = useState<Course[]>([]);

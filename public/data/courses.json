@@ -1,26 +1,38 @@
 [
   {
     "name": "C-Programming",
-    "image": "/images/c-programming.png"
+    "image": "/images/c-programming.png",
+    "isActive": true,
+    "releaseDate": "coming soon"
   },
   {
     "name": "C++ Programming",
-    "image": "/images/cpp-programming.png"
+    "image": "/images/cpp-programming.png",
+    "isActive": false,
+    "releaseDate": "coming soon"
   },
   {
     "name": "C++ Standard Template Library",
-    "image": "/images/cpp-stl.png"
+    "image": "/images/cpp-stl.png",
+    "isActive": false,
+    "releaseDate": "coming soon"
   },
   {
     "name": "Python Programming",
-    "image": "/images/python-programming.png"
+    "image": "/images/python-programming.png",
+    "isActive": false,
+    "releaseDate": "coming soon"
   },
   {
     "name": "Data Structure and Algorithms with C++",
-    "image": "/images/dsa-cpp.png"
+    "image": "/images/dsa-cpp.png",
+    "isActive": false,
+    "releaseDate": "coming soon"
   },
   {
     "name": "Data Structures and Algorithms with Python",
-    "image": "/images/dsa-python.png"
+    "image": "/images/dsa-python.png",
+    "isActive": false,
+    "releaseDate": "coming soon"
   }
 ]

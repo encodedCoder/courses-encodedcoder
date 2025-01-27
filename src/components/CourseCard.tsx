@@ -1,18 +1,25 @@
 import React from "react";
 import Image from "next/image";
+import styles from "./CourseCard.module.css";
 
 interface CourseCardProps {
   course: {
     image: string;
     name: string;
+    isActive: boolean;
+    releaseDate: string;
   };
   index: number;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course, index }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 hover:shadow-lg transition-shadow duration-300 min-h-[400px] cursor-pointer">
-      <div className="w-full h-48 relative mb-4">
+    <div
+      className={`${styles.card} ${
+        !course.isActive ? styles.cardInactive : ""
+      }`}
+    >
+      <div className={styles.cardImage}>
         <Image
           src={course.image}
           alt={course.name}
@@ -22,13 +29,11 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, index }) => {
           priority={index === 0}
         />
       </div>
-      <h2 className="text-xl font-bold mb-2 text-black">{course.name}</h2>
-      <p className="text-gray-600 mb-4">
+      <h2 className={styles.cardTitle}>{course.name}</h2>
+      <p className={styles.cardDescription}>
         Learn the fundamentals and advanced concepts of {course.name}.
       </p>
-      <button className="mt-auto bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-300">
-        Coming Soon
-      </button>
+      <button className={styles.cardButton}>{course.releaseDate}</button>
     </div>
   );
 };

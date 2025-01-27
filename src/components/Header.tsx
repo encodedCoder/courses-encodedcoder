@@ -63,15 +63,14 @@ const Header = () => {
           </button>
         </div>
       </nav>
+      {/* Hamberguer Menu for Mobile devices*/}
       {isOpen && (
         <div className="md:hidden">
           <div className="flex flex-col space-y-4 p-4">
             <Link href="/" className="nav-link" onClick={toggleMenu}>
               Home
             </Link>
-            <Link href="/" className="nav-link" onClick={toggleMenu}>
-              Home
-            </Link>
+
             <Link
               href="https://encodedcoder.com/"
               className="nav-link"
@@ -79,9 +78,6 @@ const Header = () => {
             >
               {" "}
               encodedCoder
-            </Link>
-            <Link href="/shrey" className="nav-link">
-              Shrey
             </Link>
           </div>
         </div>
