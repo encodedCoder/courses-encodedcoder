@@ -435,59 +435,6 @@ const CCodeEditor = () => {
       });
   };
 
-  // Enhanced syntax highlighting function for C code
-  const highlightSyntax = (code) => {
-    if (!code) return { __html: "" };
-
-    const theme = themes[currentTheme];
-
-    // Create a safe copy to work with
-    let safeCode = code
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-
-    // Apply highlighting in the correct order to avoid interference
-    safeCode = safeCode
-      // Keywords - ensuring they're standalone words
-      .replace(
-        /\b(auto|break|case|char|const|continue|default|do|double|else|enum|extern|float|for|goto|if|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|void|volatile|while)\b/g,
-        `<span style="color: ${theme.keywords}">$1</span>`
-      )
-
-      // Preprocessor directives - match from start of line
-      .replace(
-        /^(#include.*|#define.*|#ifndef.*|#endif.*|#pragma.*)$/gm,
-        `<span style="color: ${theme.preprocessor}">$1</span>`
-      )
-
-      // Function calls - must come before strings to avoid conflicts
-      .replace(
-        /\b([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/g,
-        `<span style="color: ${theme.functions}">$1</span>(`
-      )
-
-      // String literals
-      .replace(/"(.*?)"/g, `"<span style="color: ${theme.strings}">$1</span>"`)
-
-      // Character literals
-      .replace(/'(.*?)'/g, `'<span style="color: ${theme.strings}">$1</span>'`)
-
-      // Numbers
-      .replace(
-        /\b([0-9]+)\b/g,
-        `<span style="color: ${theme.numbers}">$1</span>`
-      )
-
-      // Comments - must come last to avoid affecting code in comments
-      .replace(
-        /\/\/(.*?)$/gm,
-        `<span style="color: ${theme.comments}">//$1</span>`
-      );
-
-    return { __html: safeCode };
-  };
-
   // Get current theme
   const theme = themes[currentTheme];
 
