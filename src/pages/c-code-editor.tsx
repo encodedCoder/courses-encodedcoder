@@ -409,7 +409,7 @@ const CCodeEditor = () => {
     setOutput("Compiling with GCC MinGW...");
 
     // Use the provided API endpoint
-    fetch("http://69.62.75.214/compile", {
+    fetch("https://69.62.75.214/compile", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -450,7 +450,7 @@ const CCodeEditor = () => {
     setOutput("Running program...\n");
 
     // Use the provided API endpoint
-    fetch("http://69.62.75.214/run", {
+    fetch("https://69.62.75.214/run", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
