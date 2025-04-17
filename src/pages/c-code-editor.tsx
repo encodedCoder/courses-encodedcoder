@@ -14,17 +14,18 @@ const CCodeEditor = () => {
   const [code, setCode] = useState(
     '#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}'
   );
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [cursorPosition, setCursorPosition] = useState({ row: 3, col: 8 });
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestion, setSelectedSuggestion] = useState(0);
-  const [currentTheme, setCurrentTheme] = useState("vscode-dark");
+  const [currentTheme, setCurrentTheme] =
+    useState<keyof typeof themes>("monokai");
   const [showSettings, setShowSettings] = useState(false);
   const [output, setOutput] = useState("");
   const [isCompiling, setIsCompiling] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [showConsole, setShowConsole] = useState(false);
-  const [compileError, setCompileError] = useState(null);
+  const [compileError, setCompileError] = useState<string[] | null>(null);
 
   // Define available themes
   const themes = {
@@ -243,10 +244,14 @@ const CCodeEditor = () => {
   ];
 
   // All completion options combined
-  const allCompletions = [...cKeywords, ...cLibraryFunctions, ...cSnippets];
+  const allCompletions: string[] = [
+    ...cKeywords,
+    ...cLibraryFunctions,
+    ...cSnippets,
+  ];
 
   // Function to handle input changes
-  const handleCodeChange = (e) => {
+  const handleCodeChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newCode = e.target.value;
     setCode(newCode);
 
@@ -261,7 +266,7 @@ const CCodeEditor = () => {
     setCursorPosition({ row, col });
 
     // Extract the current word being typed
-    const lastWord = textBeforeCursor.split(/[\s\n;{}()[\]]/).pop();
+    const lastWord = textBeforeCursor.split(/[\s\n;{}()[\]]/).pop() || "";
 
     if (lastWord && lastWord.length > 1) {
       // Filter suggestions based on the current word
@@ -278,10 +283,11 @@ const CCodeEditor = () => {
   };
 
   // Function to handle selection of a suggestion
-  const handleSuggestionClick = (suggestion) => {
-    const cursorPos = document.getElementById("editor").selectionStart;
+  const handleSuggestionClick = (suggestion: string) => {
+    const cursorPos = (document.getElementById("editor") as HTMLTextAreaElement)
+      .selectionStart;
     const textBeforeCursor = code.substring(0, cursorPos);
-    const lastWord = textBeforeCursor.split(/[\s\n;{}()[\]]/).pop();
+    const lastWord = textBeforeCursor.split(/[\s\n;{}()[\]]/).pop() || ""; // Fallback to an empty string
 
     // Replace the current word with the selected suggestion
     const textBeforeWord = textBeforeCursor.substring(
@@ -292,7 +298,7 @@ const CCodeEditor = () => {
 
     // Handle special case for snippets (which contain newlines)
     if (suggestion.includes("\n")) {
-      const indentation = textBeforeCursor.match(/^\s*/m)[0];
+      const indentation = textBeforeCursor.match(/^\s*/m)?.[0] || ""; // Using optional chaining
       // Add indentation to each line of the snippet
       const indentedSnippet = suggestion.replace(/\n/g, "\n" + indentation);
       setCode(textBeforeWord + indentedSnippet + textAfterCursor);
@@ -304,7 +310,7 @@ const CCodeEditor = () => {
 
     // Focus back on the editor
     setTimeout(() => {
-      const editor = document.getElementById("editor");
+      const editor = document.getElementById("editor") as HTMLTextAreaElement;
       editor.focus();
       // Set cursor position after the inserted suggestion
       const newCursorPos = textBeforeWord.length + suggestion.length;
@@ -314,7 +320,7 @@ const CCodeEditor = () => {
   };
 
   // Handle keyboard navigation through suggestions
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (showSuggestions) {
       if (e.key === "ArrowDown") {
         e.preventDefault();
@@ -337,7 +343,7 @@ const CCodeEditor = () => {
 
   // Toggle between light and dark theme
   const toggleTheme = () => {
-    const themeKeys = Object.keys(themes);
+    const themeKeys = Object.keys(themes) as Array<keyof typeof themes>;
     const currentIndex = themeKeys.indexOf(currentTheme);
     const nextIndex = (currentIndex + 1) % themeKeys.length;
     setCurrentTheme(themeKeys[nextIndex]);
@@ -349,7 +355,7 @@ const CCodeEditor = () => {
   };
 
   // Change to a specific theme
-  const changeTheme = (themeName) => {
+  const changeTheme = (themeName: keyof typeof themes) => {
     setCurrentTheme(themeName);
     setShowSettings(false);
   };
@@ -512,7 +518,7 @@ const CCodeEditor = () => {
             </button>
             <button
               onClick={runCode}
-              disabled={isCompiling || isRunning || compileError}
+              disabled={isCompiling || isRunning || !!compileError}
               style={{
                 backgroundColor: theme.buttonBg,
                 color: theme.buttonText,
@@ -521,10 +527,10 @@ const CCodeEditor = () => {
                 borderRadius: "4px",
                 marginRight: "8px",
                 cursor:
-                  isCompiling || isRunning || compileError
+                  isCompiling || isRunning || !!compileError
                     ? "not-allowed"
                     : "pointer",
-                opacity: isCompiling || isRunning || compileError ? 0.7 : 1,
+                opacity: isCompiling || isRunning || !!compileError ? 0.7 : 1,
                 display: "flex",
                 alignItems: "center",
                 fontSize: "0.75rem",
@@ -632,11 +638,12 @@ const CCodeEditor = () => {
                       ? theme.suggestions.selectedBg
                       : "transparent",
                   color:
-                    key === currentTheme && theme.suggestions.selectedText
-                      ? theme.suggestions.selectedText
+                    key === currentTheme
+                      ? (theme.suggestions as any).selectedText ||
+                        theme.suggestions.text
                       : theme.suggestions.text,
                 }}
-                onClick={() => changeTheme(key)}
+                onClick={() => changeTheme(key as keyof typeof themes)}
               >
                 {themeData.name}
               </div>
@@ -702,20 +709,20 @@ const CCodeEditor = () => {
               <div
                 key={index}
                 style={{
-                  padding: "4px 12px",
+                  padding: "8px 16px",
                   cursor: "pointer",
                   backgroundColor:
                     index === selectedSuggestion
                       ? theme.suggestions.selectedBg
-                      : theme.suggestions.bg,
+                      : "transparent",
                   color:
-                    index === selectedSuggestion &&
-                    theme.suggestions.selectedText
-                      ? theme.suggestions.selectedText
+                    index === selectedSuggestion
+                      ? (theme.suggestions as any).selectedText ||
+                        theme.suggestions.text
                       : theme.suggestions.text,
                 }}
-                onMouseOver={() => setSelectedSuggestion(index)}
                 onClick={() => handleSuggestionClick(suggestion)}
+                onMouseEnter={() => setSelectedSuggestion(index)}
               >
                 {suggestion}
               </div>
