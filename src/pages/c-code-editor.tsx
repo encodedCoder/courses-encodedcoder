@@ -9,6 +9,179 @@ import {
   Loader,
 } from "lucide-react";
 
+// Define the interface for suggestion styles
+interface SuggestionStyle {
+  bg: string;
+  hoverBg: string;
+  selectedBg: string;
+  text: string;
+  border: string;
+  selectedText?: string; // Make this property optional
+}
+
+// First, create a proper theme interface that uses our SuggestionStyle
+interface ThemeType {
+  name: string;
+  background: string;
+  text: string;
+  headerBg: string;
+  headerText: string;
+  border: string;
+  keywords: string;
+  preprocessor: string;
+  comments: string;
+  strings: string;
+  numbers: string;
+  functions: string;
+  consoleBg: string;
+  consoleText: string;
+  consoleBorder: string;
+  buttonBg: string;
+  buttonHoverBg: string;
+  buttonText: string;
+  suggestions: SuggestionStyle;
+}
+
+// Then, update the themes definition
+const themes: Record<string, ThemeType> = {
+  "vscode-dark": {
+    name: "VS Code Dark",
+    background: "#1e1e1e",
+    text: "#d4d4d4",
+    headerBg: "#333333",
+    headerText: "#ffffff",
+    border: "#474747",
+    keywords: "#569CD6",
+    preprocessor: "#C586C0",
+    comments: "#6A9955",
+    strings: "#CE9178",
+    numbers: "#B5CEA8",
+    functions: "#DCDCAA",
+    consoleBg: "#1e1e1e",
+    consoleText: "#cccccc",
+    consoleBorder: "#474747",
+    buttonBg: "#0e639c",
+    buttonHoverBg: "#1177bb",
+    buttonText: "#ffffff",
+    suggestions: {
+      bg: "#252526",
+      hoverBg: "#37373d",
+      selectedBg: "#04395e",
+      text: "#d4d4d4",
+      border: "#474747",
+    },
+  },
+  "vscode-light": {
+    name: "VS Code Light",
+    background: "#ffffff",
+    text: "#000000",
+    headerBg: "#f3f3f3",
+    headerText: "#333333",
+    border: "#cccccc",
+    keywords: "#0000ff",
+    preprocessor: "#a31515",
+    comments: "#008000",
+    strings: "#a31515",
+    numbers: "#098658",
+    functions: "#795e26",
+    consoleBg: "#f3f3f3",
+    consoleText: "#333333",
+    consoleBorder: "#cccccc",
+    buttonBg: "#007acc",
+    buttonHoverBg: "#0062a3",
+    buttonText: "#ffffff",
+    suggestions: {
+      bg: "#f3f3f3",
+      hoverBg: "#e8e8e8",
+      selectedBg: "#cee3f8",
+      text: "#000000",
+      border: "#cccccc",
+    },
+  },
+  monokai: {
+    name: "Monokai",
+    background: "#272822",
+    text: "#f8f8f2",
+    headerBg: "#414339",
+    headerText: "#f8f8f2",
+    border: "#49483e",
+    keywords: "#f92672",
+    preprocessor: "#a6e22e",
+    comments: "#75715e",
+    strings: "#e6db74",
+    numbers: "#ae81ff",
+    functions: "#66d9ef",
+    consoleBg: "#272822",
+    consoleText: "#f8f8f2",
+    consoleBorder: "#49483e",
+    buttonBg: "#a6e22e",
+    buttonHoverBg: "#b6f23f",
+    buttonText: "#272822",
+    suggestions: {
+      bg: "#272822",
+      hoverBg: "#3e3d32",
+      selectedBg: "#49483e",
+      text: "#f8f8f2",
+      border: "#49483e",
+    },
+  },
+  github: {
+    name: "GitHub",
+    background: "#ffffff",
+    text: "#24292e",
+    headerBg: "#f6f8fa",
+    headerText: "#24292e",
+    border: "#e1e4e8",
+    keywords: "#d73a49",
+    preprocessor: "#6f42c1",
+    comments: "#6a737d",
+    strings: "#032f62",
+    numbers: "#005cc5",
+    functions: "#6f42c1",
+    consoleBg: "#f6f8fa",
+    consoleText: "#24292e",
+    consoleBorder: "#e1e4e8",
+    buttonBg: "#2ea44f",
+    buttonHoverBg: "#22863a",
+    buttonText: "#ffffff",
+    suggestions: {
+      bg: "#ffffff",
+      hoverBg: "#f6f8fa",
+      selectedBg: "#0366d6",
+      selectedText: "#ffffff",
+      text: "#24292e",
+      border: "#e1e4e8",
+    },
+  },
+  dracula: {
+    name: "Dracula",
+    background: "#282a36",
+    text: "#f8f8f2",
+    headerBg: "#44475a",
+    headerText: "#f8f8f2",
+    border: "#6272a4",
+    keywords: "#ff79c6",
+    preprocessor: "#8be9fd",
+    comments: "#6272a4",
+    strings: "#f1fa8c",
+    numbers: "#bd93f9",
+    functions: "#50fa7b",
+    consoleBg: "#282a36",
+    consoleText: "#f8f8f2",
+    consoleBorder: "#6272a4",
+    buttonBg: "#bd93f9",
+    buttonHoverBg: "#d1a0ff",
+    buttonText: "#282a36",
+    suggestions: {
+      bg: "#282a36",
+      hoverBg: "#44475a",
+      selectedBg: "#6272a4",
+      text: "#f8f8f2",
+      border: "#6272a4",
+    },
+  },
+};
+
 // This component creates a text editor with C programming autocompletion, theme support and compilation
 const CCodeEditor = () => {
   const [code, setCode] = useState(
@@ -26,146 +199,6 @@ const CCodeEditor = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [showConsole, setShowConsole] = useState(false);
   const [compileError, setCompileError] = useState<string[] | null>(null);
-
-  // Define available themes
-  const themes = {
-    "vscode-dark": {
-      name: "VS Code Dark",
-      background: "#1e1e1e",
-      text: "#d4d4d4",
-      headerBg: "#333333",
-      headerText: "#ffffff",
-      border: "#474747",
-      keywords: "#569CD6",
-      preprocessor: "#C586C0",
-      comments: "#6A9955",
-      strings: "#CE9178",
-      numbers: "#B5CEA8",
-      functions: "#DCDCAA",
-      consoleBg: "#1e1e1e",
-      consoleText: "#cccccc",
-      consoleBorder: "#474747",
-      buttonBg: "#0e639c",
-      buttonHoverBg: "#1177bb",
-      buttonText: "#ffffff",
-      suggestions: {
-        bg: "#252526",
-        hoverBg: "#37373d",
-        selectedBg: "#04395e",
-        text: "#d4d4d4",
-        border: "#474747",
-      },
-    },
-    "vscode-light": {
-      name: "VS Code Light",
-      background: "#ffffff",
-      text: "#000000",
-      headerBg: "#f3f3f3",
-      headerText: "#333333",
-      border: "#cccccc",
-      keywords: "#0000ff",
-      preprocessor: "#a31515",
-      comments: "#008000",
-      strings: "#a31515",
-      numbers: "#098658",
-      functions: "#795e26",
-      consoleBg: "#f3f3f3",
-      consoleText: "#333333",
-      consoleBorder: "#cccccc",
-      buttonBg: "#007acc",
-      buttonHoverBg: "#0062a3",
-      buttonText: "#ffffff",
-      suggestions: {
-        bg: "#f3f3f3",
-        hoverBg: "#e8e8e8",
-        selectedBg: "#cee3f8",
-        text: "#000000",
-        border: "#cccccc",
-      },
-    },
-    monokai: {
-      name: "Monokai",
-      background: "#272822",
-      text: "#f8f8f2",
-      headerBg: "#414339",
-      headerText: "#f8f8f2",
-      border: "#49483e",
-      keywords: "#f92672",
-      preprocessor: "#a6e22e",
-      comments: "#75715e",
-      strings: "#e6db74",
-      numbers: "#ae81ff",
-      functions: "#66d9ef",
-      consoleBg: "#272822",
-      consoleText: "#f8f8f2",
-      consoleBorder: "#49483e",
-      buttonBg: "#a6e22e",
-      buttonHoverBg: "#b6f23f",
-      buttonText: "#272822",
-      suggestions: {
-        bg: "#272822",
-        hoverBg: "#3e3d32",
-        selectedBg: "#49483e",
-        text: "#f8f8f2",
-        border: "#49483e",
-      },
-    },
-    github: {
-      name: "GitHub",
-      background: "#ffffff",
-      text: "#24292e",
-      headerBg: "#f6f8fa",
-      headerText: "#24292e",
-      border: "#e1e4e8",
-      keywords: "#d73a49",
-      preprocessor: "#6f42c1",
-      comments: "#6a737d",
-      strings: "#032f62",
-      numbers: "#005cc5",
-      functions: "#6f42c1",
-      consoleBg: "#f6f8fa",
-      consoleText: "#24292e",
-      consoleBorder: "#e1e4e8",
-      buttonBg: "#2ea44f",
-      buttonHoverBg: "#22863a",
-      buttonText: "#ffffff",
-      suggestions: {
-        bg: "#ffffff",
-        hoverBg: "#f6f8fa",
-        selectedBg: "#0366d6",
-        selectedText: "#ffffff",
-        text: "#24292e",
-        border: "#e1e4e8",
-      },
-    },
-    dracula: {
-      name: "Dracula",
-      background: "#282a36",
-      text: "#f8f8f2",
-      headerBg: "#44475a",
-      headerText: "#f8f8f2",
-      border: "#6272a4",
-      keywords: "#ff79c6",
-      preprocessor: "#8be9fd",
-      comments: "#6272a4",
-      strings: "#f1fa8c",
-      numbers: "#bd93f9",
-      functions: "#50fa7b",
-      consoleBg: "#282a36",
-      consoleText: "#f8f8f2",
-      consoleBorder: "#6272a4",
-      buttonBg: "#bd93f9",
-      buttonHoverBg: "#d1a0ff",
-      buttonText: "#282a36",
-      suggestions: {
-        bg: "#282a36",
-        hoverBg: "#44475a",
-        selectedBg: "#6272a4",
-        text: "#f8f8f2",
-        border: "#6272a4",
-      },
-    },
-  };
 
   // C programming keywords, functions, and common snippets for autocompletion
   const cKeywords = [
@@ -639,7 +672,7 @@ const CCodeEditor = () => {
                       : "transparent",
                   color:
                     key === currentTheme
-                      ? (theme.suggestions as any).selectedText ||
+                      ? theme.suggestions?.selectedText ||
                         theme.suggestions.text
                       : theme.suggestions.text,
                 }}
@@ -717,7 +750,7 @@ const CCodeEditor = () => {
                       : "transparent",
                   color:
                     index === selectedSuggestion
-                      ? (theme.suggestions as any).selectedText ||
+                      ? theme.suggestions?.selectedText ||
                         theme.suggestions.text
                       : theme.suggestions.text,
                 }}
